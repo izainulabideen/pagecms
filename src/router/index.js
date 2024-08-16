@@ -1,25 +1,25 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'; // Change to createWebHashHistory
 import github from '@/services/github';
-import Content from '@/components/Content.vue'
-import Editor from '@/components/file/Editor.vue'
-import Media from '@/components/Media.vue'
-import LoginView from '@/views/LoginView.vue'
-import RepoView from '@/views/RepoView.vue'
-import HomeView from '@/views/HomeView.vue'
+import Content from '@/components/Content.vue';
+import Editor from '@/components/file/Editor.vue';
+import Media from '@/components/Media.vue';
+import LoginView from '@/views/LoginView.vue';
+import RepoView from '@/views/RepoView.vue';
+import HomeView from '@/views/HomeView.vue';
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory("https://izainulabideen.github.io/pagecms"), // Use createWebHashHistory
   routes: [
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
     },
     {
       name: 'repo-no-branch',
       path: '/:owner/:repo',
       component: RepoView,
-      props: true
+      props: true,
     },
     {
       name: 'repo',
@@ -31,7 +31,7 @@ const router = createRouter({
           name: 'content-root',
           path: 'content',
           component: Content,
-          props: true
+          props: true,
         },
         {
           name: 'content',
@@ -43,72 +43,71 @@ const router = createRouter({
               name: 'edit',
               path: 'edit/:path',
               component: Editor,
-              props: true
+              props: true,
             },
             {
               name: 'new',
               path: 'new/:path?',
               component: Editor,
-              props: route => ({
+              props: (route) => ({
                 ...route.params,
-                isNew: true
-              })
-            }
-          ]
+                isNew: true,
+              }),
+            },
+          ],
         },
         {
           name: 'media',
           path: 'media/:path?',
           component: Media,
-          props: true
+          props: true,
         },
         {
           name: 'settings',
           path: 'settings',
           component: Editor,
-          props: route => ({
+          props: (route) => ({
             ...route.params,
             path: '.pages.yml',
             title: 'Settings',
-            description: 'Settings are saved in a `.pages.yml` file at the root of your repository. [Read the documentation](https://pagescms.org/docs/configuration).',
+            description:
+              'Settings are saved in a `.pages.yml` file at the root of your repository. [Read the documentation](https://pagescms.org/docs/configuration).',
             format: 'code',
-          })
+          }),
         },
         {
           path: '',
           name: 'repo-default',
-          redirect: { name: 'content-root' }
-        }
-      ]
+          redirect: { name: 'content-root' },
+        },
+      ],
     },
     {
       path: '/login',
       name: 'login',
-      component: LoginView
+      component: LoginView,
     },
     {
       path: '/:pathMatch(.*)*',
-      redirect: { name: 'home'}
-    }
-  ]
-})
+      redirect: { name: 'home' },
+    },
+  ],
+});
 
 router.beforeEach(async (to, from) => {
-  // Redirect to saved page on callback from GitHub Oauth (see below)
   if (to.query.access_token) {
     github.setToken(to.query.access_token);
-    var redirect = localStorage.getItem('redirect') ? localStorage.getItem('redirect') : '/' ;
+    var redirect = localStorage.getItem('redirect') ? localStorage.getItem('redirect') : '/';
     localStorage.removeItem('redirect');
-    return { path: redirect }    
+    return { path: redirect };
   }
-  // Redirect logged out users to log in screen and save page for redirection post-loing
-  if (to.name != 'login' && github.token.value === null) {
+  if (to.name !== 'login' && github.token.value === null) {
     localStorage.setItem('redirect', to.fullPath);
-    return { path: '/login' }
+    return { path: '/login' };
   }
-  if (to.name == 'login' && github.token.value !== null) {
-    return { path: '/' }
+  if (to.name === 'login' && github.token.value !== null) {
+    return { path: '/' };
   }
-})
+});
 
-export default router
+export default router;
