@@ -5,6 +5,26 @@ import moment from 'moment';
 import App from './App.vue'
 import router from './router'
 
+(function () {
+  const currentUrl = window.location.href;
+
+  // Define the base URL for your GitHub Pages site
+  const baseUrl = 'https://izainulabideen.github.io/pagecms';
+
+  // Check if the URL starts with the base URL but doesn't have the correct path
+  if (!currentUrl.startsWith(baseUrl)) {
+    // Redirect to the correct base URL
+    window.location.href = baseUrl + window.location.pathname + window.location.search;
+  }
+
+  // Alternatively, if you want to append a specific path to all URLs:
+  // const newPath = '/pagecms' + window.location.pathname;
+  // if (!window.location.pathname.startsWith('/pagecms')) {
+  //   window.location.href = baseUrl + newPath + window.location.search;
+  // }
+})();
+
+
 function fromNow(value) {
   if (value) {
     return moment(String(value)).fromNow();
