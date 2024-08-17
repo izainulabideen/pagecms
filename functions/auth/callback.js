@@ -13,7 +13,7 @@ export async function onRequest(context) {
         client_id: env.GITHUB_CLIENT_ID,
         client_secret: env.GITHUB_CLIENT_SECRET,
         code: url.searchParams.get('code'),
-        redirect_uri: `https://test.zwebist.com/auth/callback`,
+        redirect_uri: `${env.BASE_URL}/auth/callback`,
       }),
     });
     
@@ -26,7 +26,7 @@ export async function onRequest(context) {
     const responseData = await response.json();
     
     if (responseData.access_token) {
-      return Response.redirect(`https://test.zwebist.com/?access_token=${responseData.access_token}`, 302);
+      return Response.redirect(`${env.BASE_URL}/?access_token=${responseData.access_token}`, 302);
     } else {
       throw new Error('Access token not found');
     }

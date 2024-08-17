@@ -3,6 +3,7 @@
   "version": "0.3.0",
   "private": true,
   "type": "module",
+  "homepage": ".",
   "scripts": {
     "dev": "wrangler pages dev -- npm run vite",
     "vite": "vite",
