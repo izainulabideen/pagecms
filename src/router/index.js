@@ -8,7 +8,7 @@ import RepoView from '@/views/RepoView.vue';
 import HomeView from '@/views/HomeView.vue';
 
 const router = createRouter({
-  history: createWebHashHistory("https://test.zwebist.com"), // Use createWebHashHistory
+  history: createWebHashHistory(), // Use createWebHashHistory
   routes: [
     {
       path: '/',
